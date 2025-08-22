@@ -1,0 +1,36 @@
+{
+  "version": "1.0.0",
+  "base_url": "https://raw.githubusercontent.com/rajashekar/lc-providers/main",
+  "providers": {
+    "openai": {
+      "name": "OpenAI",
+      "description": "OpenAI GPT models including GPT-4, GPT-4o, and GPT-3.5",
+      "config_file": "openai.toml",
+      "version": "1.0.0",
+      "auth_type": "api_key",
+      "tags": ["official", "chat", "embeddings", "images"],
+      "official": true,
+      "docs_url": "https://platform.openai.com/docs"
+    },
+    "anthropic": {
+      "name": "Anthropic Claude",
+      "description": "Anthropic's Claude models including Claude 3 Opus, Sonnet, and Haiku",
+      "config_file": "anthropic.toml",
+      "version": "1.0.0",
+      "auth_type": "api_key",
+      "tags": ["official", "chat"],
+      "official": true,
+      "docs_url": "https://docs.anthropic.com"
+    },
+    "gemini": {
+      "name": "Google Gemini",
+      "description": "Google's Gemini models including Gemini Pro and Gemini Pro Vision",
+      "config_file": "gemini.toml",
+      "version": "1.0.0",
+      "auth_type": "api_key",
+      "tags": ["official", "chat", "vision"],
+      "official": true,
+      "docs_url": "https://ai.google.dev/docs"
+    }
+  }
+}
