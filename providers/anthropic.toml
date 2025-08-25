@@ -26,6 +26,6 @@ request = """
 
 response = """
 {
-  "content": {% if content and content[0] and content[0].text %}"{{ content[0].text | replace(from='"', to='\\"') }}"{% else %}"No response content available."{% endif %}
+  "content": {% if content and content[0] and content[0].text %}{{ content[0].text | json }}{% else %}"No response content available."{% endif %}
 }
 """
