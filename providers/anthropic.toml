@@ -15,7 +15,7 @@ anthropic-version = "2023-06-01"
 request = """
 {
   "model": "{{ model }}",
-  "messages": {{ messages | json }}{% if max_tokens %},
+  "messages": {{ messages | no_images_messages | json }}{% if max_tokens %},
   "max_tokens": {{ max_tokens }}{% endif %}{% if temperature %},
   "temperature": {{ temperature }}{% endif %}{% if system_prompt %},
   "system": "{{ system_prompt }}"{% endif %}{% if stream %},
