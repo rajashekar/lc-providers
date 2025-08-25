@@ -16,7 +16,7 @@ x-api-key = "${api_key}"
 request = """
 {
   "model": "{{ model }}",
-  "messages": {{ messages | base_messages | json }}{% if max_tokens %},
+  "messages": {{ messages | anthropic_messages | json }}{% if max_tokens %},
   "max_tokens": {{ max_tokens }}{% endif %}{% if temperature %},
   "temperature": {{ temperature }}{% endif %}{% if system_prompt %},
   "system": "{{ system_prompt }}"{% endif %}{% if stream %},
