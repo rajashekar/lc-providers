@@ -8,6 +8,7 @@ chat_path = "/messages"
 
 [headers]
 anthropic-version = "2023-06-01"
+x-api-key = "${api_key}"
 
 [vars]
 
