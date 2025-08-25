@@ -3,6 +3,7 @@ models = []
 models_path = "/v1beta/models/"
 chat_path = "/v1beta/models/{model}:generateContent"
 images_path = "/v1beta/models/{model}:generateContent"
+speech_path = "/v1beta/models/{model}:generateContent"
 
 # add key using "lc keys add gemini" or "lc k a gemini"
 [headers]
@@ -89,6 +90,33 @@ request = """
     "responseModalities": ["TEXT","IMAGE"]{% if n %}, "candidateCount": {{ n }}{% endif %}
   }
 }
+"""
+
+# Speech endpoint templates for Gemini text-to-speech via generateContent
+[speech_templates.""]
+request = """
+{
+  "contents": [
+    {
+      "parts": [
+        { "text": "{{ input | replace(from='"', to='\\"') }}" }
+      ]
+    }
+  ],
+  "generationConfig": {
+    "responseModalities": ["AUDIO"],
+    "speechConfig": {
+      "voiceConfig": {
+        "prebuiltVoiceConfig": {
+          "voiceName": "{{ voice | default(value="Kore") }}"
+        }
+      }
+    }
+  }
+}
+"""
+response = """
+{{ candidates[0].content.parts[0].inlineData.data }}
 """
 response = """
 {
