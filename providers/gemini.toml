@@ -2,6 +2,7 @@ endpoint = "https://generativelanguage.googleapis.com"
 models = []
 models_path = "/v1beta/models/"
 chat_path = "/v1beta/models/{model}:generateContent"
+images_path = "/v1beta/models/{model}:generateContent"
 
 # add key using "lc keys add gemini" or "lc k a gemini"
 [headers]
@@ -69,5 +70,34 @@ request = '''
 response = """
 {
   "content": {{ candidates[0].content.parts[0].text | json }}
+}
+"""
+
+# Images endpoint templates for Gemini image generation via generateContent
+[images_templates.""]
+request = """
+{
+  "contents": [
+    {
+      "role": "user",
+      "parts": [
+        { "text": "{{ prompt | replace(from='"', to='\\"') }}" }
+      ]
+    }
+  ],
+  "generationConfig": {
+    "responseModalities": ["TEXT","IMAGE"]{% if n %}, "candidateCount": {{ n }}{% endif %}
+  }
+}
+"""
+response = """
+{
+  "data": [
+    {% for part in candidates[0].content.parts %}
+      {% if part.inlineData and part.inlineData.data %}
+        { "b64_json": "{{ part.inlineData.data }}" }{% if not loop.last %},{% endif %}
+      {% endif %}
+    {% endfor %}
+  ]
 }
 """
