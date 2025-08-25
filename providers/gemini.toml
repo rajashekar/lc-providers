@@ -1,35 +1,73 @@
-# Google Gemini Provider Configuration
-# Version: 1.0.0
-
-endpoint = "https://generativelanguage.googleapis.com/v1beta"
+endpoint = "https://generativelanguage.googleapis.com"
 models = []
-models_path = "/models"
-chat_path = "/models/{model}:generateContent"
+models_path = "/v1beta/models/"
+chat_path = "/v1beta/models/{model}:generateContent"
 
+# add key using "lc keys add gemini" or "lc k a gemini"
 [headers]
+x-goog-api-key = "${api_key}"
 
 [vars]
 
-[chat_templates."gemini.*"]
-request = """
+[chat_templates.""]
+request = '''
 {
   "contents": [
-    {% for message in messages %}
+    {%- for message in messages %}
+    {%- if message.role == "system" %}
     {
-      "role": "{% if message.role == 'assistant' %}model{% else %}{{ message.role }}{% endif %}",
-      "parts": [{"text": "{{ message.content }}"}]
-    }{% if not loop.last %},{% endif %}
-    {% endfor %}
-  ]{% if max_tokens or temperature %},
+      "role": "user",
+      "parts": [{"text": "{{ message.content_type.content | default(value="System message") | replace(from='"', to='\\"') }}"}]
+    },
+    {
+      "role": "model",
+      "parts": [{"text": "I understand. I'll follow these instructions."}]
+    }{%- if not loop.last %},{% endif %}
+    {%- elif message.role == "user" %}
+    {
+      "role": "user",
+      "parts": [{"text": "{{ message.content_type.content | default(value=message.content | default(value="User message")) | replace(from='"', to='\\"') }}"}]
+    }{%- if not loop.last %},{% endif %}
+    {%- elif message.role == "assistant" %}
+    {
+      "role": "model",
+      "parts": [{"text": "{{ message.content_type.content | default(value=message.content | default(value="Assistant message")) | replace(from='"', to='\\"') }}"}]
+    }{%- if not loop.last %},{% endif %}
+    {%- elif message.role == "tool" %}
+    {
+      "role": "function",
+      "parts": [{"functionResponse": {"name": "{{ message.tool_call_id }}", "response": {"result": "{{ message.content_type.content | default(value=message.content | default(value="Tool response")) | replace(from='"', to='\\"') }}"}}}]
+    }{%- if not loop.last %},{% endif %}
+    {%- endif %}
+    {%- endfor %}
+  ],
+  {%- if tools %}
+  "tools": [
+    {
+      "functionDeclarations": [
+        {%- for tool in tools %}
+        {
+          "name": "{{ tool.function.name }}",
+          "description": "{{ tool.function.description | default(value="") }}",
+          "parameters": {{ tool.function.parameters | tojson }}
+        }{%- if not loop.last %},{% endif %}
+        {%- endfor %}
+      ]
+    }
+  ],
+  {%- endif %}
   "generationConfig": {
-    {% if max_tokens %}"maxOutputTokens": {{ max_tokens }}{% if temperature %},{% endif %}{% endif %}
-    {% if temperature %}"temperature": {{ temperature }}{% endif %}
-  }{% endif %}
+    {%- if max_tokens %}
+    "maxOutputTokens": {{ max_tokens }}{%- if temperature %},{% endif %}
+    {%- endif %}
+    {%- if temperature %}
+    "temperature": {{ temperature }}
+    {%- endif %}
+  }
 }
-"""
-
+'''
 response = """
-{% if candidates and candidates[0].content.parts[0].text %}
-{{ candidates[0].content.parts[0].text }}
-{% endif %}
+{
+  "content": {{ candidates[0].content.parts[0].text | json }}
+}
 """

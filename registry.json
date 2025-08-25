@@ -4,7 +4,7 @@
   "providers": {
     "openai": {
       "name": "OpenAI",
-      "description": "OpenAI GPT models including GPT-4, GPT-4o, and GPT-3.5",
+      "description": "OpenAI GPT models including GPT-5, GPT-4o, and GPT-3.5",
       "config_file": "openai.toml",
       "version": "1.0.0",
       "auth_type": "api_key",
