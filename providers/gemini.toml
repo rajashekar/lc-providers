@@ -91,6 +91,17 @@ request = """
   }
 }
 """
+response = """
+{
+  "data": [
+    {% for part in candidates[0].content.parts %}
+      {% if part.inlineData and part.inlineData.data %}
+        { "b64_json": "{{ part.inlineData.data }}" }{% if not loop.last %},{% endif %}
+      {% endif %}
+    {% endfor %}
+  ]
+}
+"""
 
 # Speech endpoint templates for Gemini text-to-speech via generateContent
 [speech_templates.""]
@@ -117,15 +128,4 @@ request = """
 """
 response = """
 {{ candidates[0].content.parts[0].inlineData.data }}
-"""
-response = """
-{
-  "data": [
-    {% for part in candidates[0].content.parts %}
-      {% if part.inlineData and part.inlineData.data %}
-        { "b64_json": "{{ part.inlineData.data }}" }{% if not loop.last %},{% endif %}
-      {% endif %}
-    {% endfor %}
-  ]
-}
 """
