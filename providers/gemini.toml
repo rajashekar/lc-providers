@@ -127,5 +127,5 @@ request = """
 }
 """
 response = """
-{{ candidates[0].content.parts[0].inlineData.data }}
+"{{ candidates[0].content.parts[0].inlineData.data }}"
 """
