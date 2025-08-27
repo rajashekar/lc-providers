@@ -9,9 +9,13 @@ auth_type = "google_sa_jwt"
 
 [cached_token]
 
+# change this directly
+# or do 
+# lc providers vars set vertex_google project your-actual-gcp-project-id
+# lc providers vars set location global
 [vars]
-location = "global"
-project = "${vertex_gcp_project_name}
+location = "your-actual-gcp-project-location" 
+project = "your-actual-gcp-project-id"
 
 [chat_templates.""]
 request = '''
