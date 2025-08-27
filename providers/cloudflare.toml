@@ -1,0 +1,22 @@
+endpoint = "https://api.cloudflare.com/client/v4"
+models = []
+models_path = "/models"
+chat_path = "/accounts/{account_id}/ai/run/@cf/{model}"
+
+[headers]
+
+[vars]
+account_id = "your-account-id"
+
+[chat_templates.""]
+response = """
+{% if success %}
+{
+  "content": "{{ result.response }}"
+}
+{% else %}
+{
+  "error": "Cloudflare API request failed"
+}
+{% endif %}
+"""

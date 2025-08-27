@@ -61,6 +61,66 @@
       "tags": ["official", "chat", "anthropic", "aws"],
       "official": true,
       "docs_url": "https://docs.aws.amazon.com/bedrock/"
+    },
+    "cloudflare": {
+      "name": "Cloudflare AI",
+      "description": "Cloudflare Workers AI platform with various foundation models",
+      "config_file": "cloudflare.toml",
+      "version": "1.0.0",
+      "auth_type": "api_key",
+      "tags": ["official", "chat", "workers", "cloudflare"],
+      "official": true,
+      "docs_url": "https://developers.cloudflare.com/workers-ai/"
+    },
+    "github": {
+      "name": "GitHub Models",
+      "description": "GitHub's AI models API with access to various foundation models",
+      "config_file": "github.toml",
+      "version": "1.0.0",
+      "auth_type": "api_key",
+      "tags": ["official", "chat", "github"],
+      "official": true,
+      "docs_url": "https://docs.github.com/en/github-models"
+    },
+    "github-copilot": {
+      "name": "GitHub Copilot Chat",
+      "description": "GitHub Copilot's chat interface for code assistance and conversation",
+      "config_file": "github-copilot.toml",
+      "version": "1.0.0",
+      "auth_type": "api_key",
+      "tags": ["official", "chat", "copilot", "github", "code-assistance"],
+      "official": true,
+      "docs_url": "https://docs.github.com/en/copilot"
+    },
+    "cohere": {
+      "name": "Cohere",
+      "description": "Cohere's language models for text generation, embeddings, and classification",
+      "config_file": "cohere.toml",
+      "version": "1.0.0",
+      "auth_type": "api_key",
+      "tags": ["official", "chat", "embeddings"],
+      "official": true,
+      "docs_url": "https://docs.cohere.com/"
+    },
+    "deepinfra": {
+      "name": "DeepInfra",
+      "description": "DeepInfra's cloud platform with access to various open-source models and image generation",
+      "config_file": "deepinfra.toml",
+      "version": "1.0.0",
+      "auth_type": "api_key",
+      "tags": ["official", "chat", "images", "open-source"],
+      "official": true,
+      "docs_url": "https://deepinfra.com/docs"
+    },
+    "meta": {
+      "name": "Meta Llama",
+      "description": "Meta's Llama models including Llama 3 and other foundation models",
+      "config_file": "meta.toml",
+      "version": "1.0.0",
+      "auth_type": "api_key",
+      "tags": ["official", "chat", "llama", "meta"],
+      "official": true,
+      "docs_url": "https://llama.meta.com/"
     }
   }
 }

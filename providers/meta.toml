@@ -1,0 +1,33 @@
+endpoint = "https://api.llama.com/v1"
+models = []
+models_path = "/models"
+chat_path = "/chat/completions"
+
+[headers]
+
+[vars]
+
+[chat_templates.""]
+response = '''
+{
+  "id": "chatcmpl-{{ random_id() }}",
+  "object": "chat.completion",
+  "created": {{ now() | int }},
+  "model": "{{ model }}",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{{ completion_message.content.text | replace(from='"', to='\\"') }}"
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "total_tokens": 0
+  }
+}
+'''

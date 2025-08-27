@@ -1,0 +1,15 @@
+endpoint = "https://api.cohere.com/v2"
+models = []
+models_path = "/models"
+chat_path = "/chat"
+
+[headers]
+
+[vars]
+
+[chat_templates.""]
+response = """
+{
+  "content": {{ message.content[0].text | json }}
+}
+"""

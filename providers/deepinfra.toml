@@ -1,0 +1,35 @@
+endpoint = "https://api.deepinfra.com/v1/openai"
+models = []
+models_path = "/models"
+chat_path = "/chat/completions"
+images_path = "/images/generations"
+
+[headers]
+
+[vars]
+
+[images_templates.""]
+request = """
+{
+  "prompt": "{{ prompt }}"{% if model %},
+  "model": "{{ model }}"{% endif %}{% if n %},
+  "n": {{ n }}{% endif %}{% if size %},
+  "size": "{{ size }}"{% endif %}{% if quality %},
+  "quality": "{{ quality }}"{% endif %}{% if style %},
+  "style": "{{ style }}"{% endif %},
+  "response_format": "b64_json"
+}
+"""
+response = """
+{
+  "created": {{ created }},
+  "data": [
+    {% for item in data %}
+    {
+      {% if item.b64_json %}"b64_json": "{{ item.b64_json }}"{% endif %}{% if item.url %},
+      "url": "{{ item.url }}"{% endif %}
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ]
+}
+"""

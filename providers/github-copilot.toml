@@ -1,0 +1,11 @@
+endpoint = "https://api.individual.githubcopilot.com"
+models = []
+models_path = "/models"
+chat_path = "/chat/completions"
+token_url = "https://api.github.com/copilot_internal/v2/token"
+
+[headers]
+user-agent = "GitHubCopilotChat/0.28.2"
+editor-version = "vscode/1.101.1"
+
+[vars]

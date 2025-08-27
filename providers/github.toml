@@ -1,0 +1,8 @@
+endpoint = "https://models.github.ai"
+models = []
+models_path = "/catalog/models"
+chat_path = "/inference/chat/completions"
+
+[headers]
+
+[vars]
