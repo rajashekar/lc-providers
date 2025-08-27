@@ -1,0 +1,65 @@
+endpoint = "https://bedrock.us-east-1.amazonaws.com"
+models = []
+models_path = "/foundation-models"
+chat_path = "https://bedrock-runtime.us-east-1.amazonaws.com/model/{model}/converse"
+
+[headers]
+
+[vars]
+
+[chat_templates.""]
+request = '''
+{
+  "messages": [
+    {% for message in messages %}
+    {
+      "role": "{{ message.role | system_to_user_role }}",
+      "content": [
+        {
+          "text": "{% if message.content %}{{ message.content | replace(from='"', to='\"') }}{% else %}{% endif %}"
+        }
+      ]
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ]{% if max_tokens %},
+  "max_tokens": {{ max_tokens }}{% endif %}{% if temperature %},
+  "temperature": {{ temperature }}{% endif %}{% if tools %},
+  "tools": {{ tools | json }}{% endif %}{% if stream %},
+  "stream": {{ stream }}{% endif %}
+}
+'''
+response = """
+{
+  "content": {{ output.message.content[0].text | json }}
+}
+"""
+
+[chat_templates."anthropic.claude.*"]
+request = '''
+{
+  "messages": [
+    {% for message in messages %}
+    {
+      "role": "{{ message.role | system_to_user_role }}",
+      "content": [
+        {
+          "text": "{% if message.content %}{{ message.content | replace(from='"', to='\"') }}{% else %}{% endif %}"
+        }
+      ]
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ],
+  "inferenceConfig": {
+    {% if max_tokens %}"maxTokens": {{ max_tokens }}{% if temperature %},{% endif %}{% endif %}
+    {% if temperature %}"temperature": {{ temperature }}{% endif %}
+  }{% if tools %},
+  "toolConfig": {
+    "tools": {{ tools | json }}
+  }{% endif %}
+}
+'''
+response = """
+{
+  "content": {{ output.message.content[0].text | json }}
+}
+"""
