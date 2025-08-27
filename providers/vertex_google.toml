@@ -7,8 +7,6 @@ auth_type = "google_sa_jwt"
 
 [headers]
 
-[cached_token]
-
 # change this directly
 # or do 
 # lc providers vars set vertex_google project your-actual-gcp-project-id
