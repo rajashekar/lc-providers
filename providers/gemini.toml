@@ -4,6 +4,7 @@ models_path = "/v1beta/models/"
 chat_path = "/v1beta/models/{model}:generateContent"
 images_path = "/v1beta/models/{model}:generateContent"
 speech_path = "/v1beta/models/{model}:generateContent"
+embeddings_path = "/v1beta/models/{model}:embedContent"
 
 # add key using "lc keys add gemini" or "lc k a gemini"
 [headers]
@@ -14,35 +15,7 @@ x-goog-api-key = "${api_key}"
 [chat_templates.""]
 request = '''
 {
-  "contents": [
-    {%- for message in messages %}
-    {%- if message.role == "system" %}
-    {
-      "role": "user",
-      "parts": [{"text": "{{ message.content_type.content | default(value="System message") | replace(from='"', to='\\"') }}"}]
-    },
-    {
-      "role": "model",
-      "parts": [{"text": "I understand. I'll follow these instructions."}]
-    }{%- if not loop.last %},{% endif %}
-    {%- elif message.role == "user" %}
-    {
-      "role": "user",
-      "parts": [{"text": "{{ message.content_type.content | default(value=message.content | default(value="User message")) | replace(from='"', to='\\"') }}"}]
-    }{%- if not loop.last %},{% endif %}
-    {%- elif message.role == "assistant" %}
-    {
-      "role": "model",
-      "parts": [{"text": "{{ message.content_type.content | default(value=message.content | default(value="Assistant message")) | replace(from='"', to='\\"') }}"}]
-    }{%- if not loop.last %},{% endif %}
-    {%- elif message.role == "tool" %}
-    {
-      "role": "function",
-      "parts": [{"functionResponse": {"name": "{{ message.tool_call_id }}", "response": {"result": "{{ message.content_type.content | default(value=message.content | default(value="Tool response")) | replace(from='"', to='\\"') }}"}}}]
-    }{%- if not loop.last %},{% endif %}
-    {%- endif %}
-    {%- endfor %}
-  ],
+  "contents": {{ messages | gemini_messages | json }},
   {%- if tools %}
   "tools": [
     {
@@ -128,4 +101,31 @@ request = """
 """
 response = """
 "{{ candidates[0].content.parts[0].inlineData.data }}"
+"""
+
+# Embeddings endpoint templates for Gemini text embeddings via embedContent
+[embeddings_templates.""]
+request = """
+{
+  "model": "models/{{ model }}",
+  "content": {
+    "parts": [
+      {
+        "text": "{{ input }}"
+      }
+    ]
+  }
+}
+"""
+response = """
+{
+  "data": [
+    {
+      "embedding": {{ embedding.values | json }}
+    }
+  ],
+  "usage": {
+    "total_tokens": 1
+  }
+}
 """

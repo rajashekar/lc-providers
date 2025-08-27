@@ -5,6 +5,7 @@ endpoint = "https://api.anthropic.com/v1"
 models = []
 models_path = "/models"
 chat_path = "/messages"
+embeddings_path = "/embeddings"
 
 [headers]
 anthropic-version = "2023-06-01"
@@ -27,5 +28,23 @@ request = """
 response = """
 {
   "content": {% if content and content[0] and content[0].text %}{{ content[0].text | json }}{% else %}"No response content available."{% endif %}
+}
+"""
+
+# Embeddings endpoint templates (Note: Anthropic doesn't provide embeddings models)
+[embeddings_templates.""]
+request = """
+{
+  "model": "{{ model }}",
+  "input": "{{ input }}"
+}
+"""
+response = """
+{
+  "data": [
+    {
+      "embedding": {{ data[0].embedding | json }}
+    }
+  ]
 }
 """
