@@ -37,7 +37,7 @@
       "description": "Google's Vertex AI platform with Gemini and other Google models",
       "config_file": "vertex_google.toml",
       "version": "1.0.0",
-      "auth_type": "google_sa_jwt",
+      "auth_type": "service_account",
       "tags": ["official", "chat", "vision", "images"],
       "official": true,
       "docs_url": "https://cloud.google.com/vertex-ai/docs"
@@ -47,7 +47,7 @@
       "description": "Meta's Llama models hosted on Google Vertex AI platform",
       "config_file": "vertex_llama.toml",
       "version": "1.0.0",
-      "auth_type": "google_sa_jwt",
+      "auth_type": "service_account",
       "tags": ["official", "chat"],
       "official": true,
       "docs_url": "https://cloud.google.com/vertex-ai/docs"
