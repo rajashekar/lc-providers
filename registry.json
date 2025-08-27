@@ -51,6 +51,16 @@
       "tags": ["official", "chat"],
       "official": true,
       "docs_url": "https://cloud.google.com/vertex-ai/docs"
+    },
+    "amazon_bedrock": {
+      "name": "Amazon Bedrock",
+      "description": "AWS Bedrock foundation models including Anthropic Claude, Amazon Titan, and other models",
+      "config_file": "amazon_bedrock.toml",
+      "version": "1.0.0",
+      "auth_type": "api_key",
+      "tags": ["official", "chat", "anthropic", "aws"],
+      "official": true,
+      "docs_url": "https://docs.aws.amazon.com/bedrock/"
     }
   }
 }
