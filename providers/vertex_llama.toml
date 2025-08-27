@@ -1,0 +1,14 @@
+endpoint = "https://us-east5-aiplatform.googleapis.com"
+models = []
+models_path = "/models"
+chat_path = "/v1/projects/{project}/locations/{location}/endpoints/openapi/chat/completions"
+token_url = "https://oauth2.googleapis.com/token"
+auth_type = "google_sa_jwt"
+
+[headers]
+
+[cached_token]
+
+[vars]
+project = "${vertex_gcp_project_name}
+location = "us-east5"

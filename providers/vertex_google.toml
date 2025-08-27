@@ -1,0 +1,77 @@
+endpoint = "https://aiplatform.googleapis.com"
+models = []
+models_path = "/models"
+chat_path = "/v1/projects/{project}/locations/{location}/publishers/google/models/{model}:generateContent"
+token_url = "https://oauth2.googleapis.com/token"
+auth_type = "google_sa_jwt"
+
+[headers]
+
+[cached_token]
+
+[vars]
+location = "global"
+project = "${vertex_gcp_project_name}
+
+[chat_templates.""]
+request = '''
+{
+  "contents": [
+    {%- for message in messages %}
+    {%- if message.role == "system" %}
+    {
+      "role": "user",
+      "parts": [{"text": "{{ message.content_type.content | default(value="System message") | replace(from='"', to='\\"') }}"}]
+    },
+    {
+      "role": "model",
+      "parts": [{"text": "I understand. I'll follow these instructions."}]
+    }{%- if not loop.last %},{% endif %}
+    {%- elif message.role == "user" %}
+    {
+      "role": "user",
+      "parts": [{"text": "{{ message.content_type.content | default(value=message.content | default(value="User message")) | replace(from='"', to='\\"') }}"}]
+    }{%- if not loop.last %},{% endif %}
+    {%- elif message.role == "assistant" %}
+    {
+      "role": "model",
+      "parts": [{"text": "{{ message.content_type.content | default(value=message.content | default(value="Assistant message")) | replace(from='"', to='\\"') }}"}]
+    }{%- if not loop.last %},{% endif %}
+    {%- elif message.role == "tool" %}
+    {
+      "role": "function",
+      "parts": [{"functionResponse": {"name": "{{ message.tool_call_id }}", "response": {"result": "{{ message.content_type.content | default(value=message.content | default(value="Tool response")) | replace(from='"', to='\\"') }}"}}}]
+    }{%- if not loop.last %},{% endif %}
+    {%- endif %}
+    {%- endfor %}
+  ],
+  {%- if tools %}
+  "tools": [
+    {
+      "functionDeclarations": [
+        {%- for tool in tools %}
+        {
+          "name": "{{ tool.function.name }}",
+          "description": "{{ tool.function.description | default(value="") }}",
+          "parameters": {{ tool.function.parameters | tojson }}
+        }{%- if not loop.last %},{% endif %}
+        {%- endfor %}
+      ]
+    }
+  ],
+  {%- endif %}
+  "generationConfig": {
+    {%- if max_tokens %}
+    "maxOutputTokens": {{ max_tokens }}{%- if temperature %},{% endif %}
+    {%- endif %}
+    {%- if temperature %}
+    "temperature": {{ temperature }}
+    {%- endif %}
+  }
+}
+'''
+response = """
+{
+  "content": {{ candidates[0].content.parts[0].text | json }}
+}
+"""
