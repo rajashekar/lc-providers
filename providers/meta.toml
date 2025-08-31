@@ -10,24 +10,6 @@ chat_path = "/chat/completions"
 [chat_templates.""]
 response = '''
 {
-  "id": "chatcmpl-{{ random_id() }}",
-  "object": "chat.completion",
-  "created": {{ now() | int }},
-  "model": "{{ model }}",
-  "choices": [
-    {
-      "index": 0,
-      "message": {
-        "role": "assistant",
-        "content": "{{ completion_message.content.text | replace(from='"', to='\\"') }}"
-      },
-      "finish_reason": "stop"
-    }
-  ],
-  "usage": {
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "total_tokens": 0
-  }
+  "content": {{ completion_message.content.text | json }}
 }
 '''
